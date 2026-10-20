@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window
+    x:Class="IdermaClinica.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Iderma · Clínica capilar">
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TitleBar
+            x:Name="AppTitleBar"
+            Title="Iderma"
+            Subtitle="Clínica capilar"
+            IsBackButtonVisible="False"
+            BackRequested="TitleBar_BackRequested"
+            IsPaneToggleButtonVisible="True"
+            PaneToggleRequested="TitleBar_PaneToggleRequested">
+            <TitleBar.IconSource>
+                <ImageIconSource ImageSource="img/logo-clientes.ico" />
+            </TitleBar.IconSource>
+            <TitleBar.Content>
+                <AutoSuggestBox
+                    x:Name="BuscadorPacientes"
+                    Width="520"
+                    PlaceholderText="Buscar paciente u operación"
+                    QueryIcon="Find"
+                    UpdateTextOnSelect="False"
+                    TextChanged="Buscador_TextChanged"
+                    QuerySubmitted="Buscador_QuerySubmitted">
+                    <AutoSuggestBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel MinWidth="460" Padding="2,4">
+                                <TextBlock
+                                    FontSize="12"
+                                    FontWeight="SemiBold"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="{Binding Titulo}"
+                                    Visibility="{Binding EsEncabezado, Converter={StaticResource BoolAVisibilidad}}" />
+                                <StackPanel Visibility="{Binding EsElemento, Converter={StaticResource BoolAVisibilidad}}">
+                                    <TextBlock FontWeight="SemiBold" Text="{Binding Titulo}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding Detalle}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </AutoSuggestBox.ItemTemplate>
+                </AutoSuggestBox>
+            </TitleBar.Content>
+        </TitleBar>
+
+        <NavigationView
+            x:Name="NavView"
+            Grid.Row="1"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleButtonVisible="False"
+            IsSettingsVisible="False"
+            OpenPaneLength="248"
+            PaneDisplayMode="Left"
+            PaneTitle="Iderma"
+            SelectionChanged="NavView_SelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Panel" IsSelected="True" Tag="panel">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE80F;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Clientes" Tag="clientes">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE716;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Operaciones" Tag="operaciones">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE95E;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Cuidados" Tag="cuidados">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE73E;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Ventas" Tag="ventas">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7BF;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <InfoBar
+                    x:Name="AvisoGlobal"
+                    Title="Seguimiento"
+                    Margin="24,12,24,0"
+                    IsClosable="True"
+                    IsOpen="False"
+                    Severity="Success" />
+                <Frame x:Name="NavFrame" Grid.Row="1" />
+            </Grid>
+        </NavigationView>
+    </Grid>
+</Window>

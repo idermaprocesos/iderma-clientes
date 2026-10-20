@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "IdermaClinica": {
+      "commandName": "Project"
+    },
+    "IdermaClinica (Package)": {
+      "commandName": "MsixPackage"
+    }
+  }
+}

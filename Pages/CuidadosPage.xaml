@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="IdermaClinica.Pages.CuidadosPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:IdermaClinica.Controls">
+    <ScrollViewer>
+        <StackPanel Padding="28,20,28,32" Spacing="16">
+            <StackPanel Spacing="4">
+                <TextBlock Style="{StaticResource KickerStyle}" Text="PAUTA" />
+                <TextBlock Style="{StaticResource PageTitleStyle}" Text="Cuidados" />
+                <TextBlock Style="{StaticResource SubtitleStyle}" Text="Medicación y cremas ligadas a cada operación. Registrar hoy anota el día en curso. Registrar negativa quita un día cumplido y devuelve el porcentaje anterior, sea cual sea. Poner la pauta al día recupera los días ya exigibles." />
+            </StackPanel>
+
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    x:Name="Buscador"
+                    PlaceholderText="Buscar cliente o producto"
+                    TextChanged="Filtro_Changed" />
+                <ComboBox
+                    x:Name="FiltroTipo"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    SelectedIndex="0"
+                    SelectionChanged="Filtro_Changed">
+                    <ComboBoxItem Content="Todos" />
+                    <ComboBoxItem Content="Medicación" />
+                    <ComboBoxItem Content="Crema" />
+                </ComboBox>
+                <CheckBox
+                    x:Name="SoloRiesgo"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Checked="Filtro_Changed"
+                    Content="Solo en riesgo"
+                    Unchecked="Filtro_Changed" />
+                <TextBlock
+                    Grid.Column="3"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right"
+                    Foreground="{StaticResource MutedBrush}"
+                    Text="{Binding Conteo}" />
+            </Grid>
+
+            <TextBlock
+                Style="{StaticResource SubtitleStyle}"
+                Text="Ningún cuidado coincide con el filtro."
+                Visibility="{Binding NoHayResultados, Converter={StaticResource BoolAVisibilidad}}" />
+
+            <ItemsControl ItemsSource="{Binding Visibles}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:CuidadoTarjeta Cuidado="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

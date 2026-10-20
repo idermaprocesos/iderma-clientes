@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="IdermaClinica.Pages.OperacionPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:IdermaClinica.Controls">
+    <ScrollViewer>
+        <StackPanel Padding="28,20,28,32" Spacing="16">
+            <StackPanel Spacing="4">
+                <TextBlock Style="{StaticResource KickerStyle}" Text="{Binding Operacion.Categoria}" />
+                <TextBlock Style="{StaticResource PageTitleStyle}" Text="{Binding Operacion.Tipo}" TextWrapping="Wrap" />
+                <TextBlock Style="{StaticResource SubtitleStyle}" Text="{Binding Operacion.ClienteNombre}" />
+            </StackPanel>
+
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel Spacing="4">
+                        <TextBlock Style="{StaticResource KickerStyle}" Text="IMPORTE" />
+                        <TextBlock Style="{StaticResource CifraStyle}" Text="{Binding Operacion.ImporteTexto}" />
+                        <TextBlock Style="{StaticResource SubtitleStyle}" Text="{Binding Operacion.FechaTexto}" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                    <StackPanel Spacing="4">
+                        <TextBlock Style="{StaticResource KickerStyle}" Text="INTERVENCIÓN" />
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Foreground="{Binding Operacion.EstadoOperacion, Converter={StaticResource EstadoAColor}}"
+                            Text="{Binding Operacion.EstadoOperacion}" />
+                        <TextBlock Style="{StaticResource SubtitleStyle}" Text="{Binding Operacion.MedicoZona}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                    <StackPanel Spacing="4">
+                        <TextBlock Style="{StaticResource KickerStyle}" Text="PAUTA" />
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Foreground="{Binding Operacion.EstadoPauta, Converter={StaticResource EstadoAColor}}"
+                            Text="{Binding Operacion.EstadoPauta}" />
+                        <TextBlock Style="{StaticResource SubtitleStyle}" Text="{Binding Operacion.AdherenciaTexto}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Style="{StaticResource CardStyle}">
+                <TextBlock Text="{Binding Operacion.Detalle}" TextWrapping="Wrap" />
+            </Border>
+
+            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Productos de esta operación" />
+            <ItemsControl ItemsSource="{Binding Ventas}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,8" Style="{StaticResource CardStyle}">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Spacing="2">
+                                    <TextBlock FontWeight="SemiBold" Text="{Binding Producto}" TextWrapping="Wrap" />
+                                    <TextBlock Foreground="{StaticResource MutedBrush}" Text="{Binding TipoProducto}" />
+                                    <TextBlock FontSize="12" Foreground="{StaticResource MutedBrush}" Text="{Binding FechaTexto}" />
+                                </StackPanel>
+                                <TextBlock
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding TotalTexto}" />
+                                <Button
+                                    Grid.Column="2"
+                                    VerticalAlignment="Center"
+                                    Click="Cobrar_Click"
+                                    Content="{Binding TextoCobro}"
+                                    IsEnabled="{Binding PuedeCobrar}"
+                                    Style="{StaticResource BotonPrimario}"
+                                    Tag="{Binding}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Lo que esta operación obliga a cumplir" />
+            <ItemsControl ItemsSource="{Binding Operacion.Cuidados}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:CuidadoTarjeta Cuidado="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

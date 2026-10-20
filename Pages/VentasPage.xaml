@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="IdermaClinica.Pages.VentasPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer>
+        <StackPanel Padding="28,20,28,32" Spacing="16">
+            <StackPanel Spacing="4">
+                <TextBlock Style="{StaticResource KickerStyle}" Text="CAJA" />
+                <TextBlock Style="{StaticResource PageTitleStyle}" Text="Ventas" />
+                <TextBlock Style="{StaticResource SubtitleStyle}" Text="Las intervenciones van aparte de los productos. Lo pendiente es medicación o crema pautada que todavía no se ha cobrado." />
+            </StackPanel>
+
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel Spacing="4">
+                        <TextBlock Style="{StaticResource KickerStyle}" Text="INTERVENCIONES DEL MES" />
+                        <TextBlock Style="{StaticResource CifraStyle}" Text="{Binding Store.ImporteMesTexto}" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                    <StackPanel Spacing="4">
+                        <TextBlock Style="{StaticResource KickerStyle}" Text="PRODUCTOS COBRADOS" />
+                        <TextBlock Style="{StaticResource CifraStyle}" Text="{Binding Store.ProductosMesTexto}" />
+                        <TextBlock Style="{StaticResource SubtitleStyle}" Text="Este mes" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                    <StackPanel Spacing="4">
+                        <TextBlock Style="{StaticResource KickerStyle}" Text="POR COBRAR" />
+                        <TextBlock Foreground="{StaticResource EstadoRiesgoBrush}" Style="{StaticResource CifraStyle}" Text="{Binding Store.PendienteTexto}" />
+                        <TextBlock Style="{StaticResource SubtitleStyle}" Text="{Binding Store.PendienteDetalle}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Intervenciones" />
+            <Border Style="{StaticResource CardStyle}" Padding="0">
+                <StackPanel>
+                    <Grid Padding="16,12" Background="{StaticResource SoftBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="1.4*" />
+                            <ColumnDefinition Width="1.3*" />
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="140" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock FontSize="12" FontWeight="SemiBold" Text="Fecha" />
+                        <TextBlock Grid.Column="1" FontSize="12" FontWeight="SemiBold" Text="Cliente" />
+                        <TextBlock Grid.Column="2" FontSize="12" FontWeight="SemiBold" Text="Operación" />
+                        <TextBlock Grid.Column="3" FontSize="12" FontWeight="SemiBold" Text="Importe" />
+                        <TextBlock Grid.Column="4" FontSize="12" FontWeight="SemiBold" Text="Estado" />
+                    </Grid>
+                    <ItemsControl ItemsSource="{Binding Store.Operaciones}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="16,10" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,0,0,1" Tapped="Operacion_Tapped">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="1.4*" />
+                                        <ColumnDefinition Width="1.3*" />
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="140" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding FechaTexto}" />
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding ClienteNombre}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Tipo}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Column="3" VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding ImporteTexto}" />
+                                    <TextBlock
+                                        Grid.Column="4"
+                                        VerticalAlignment="Center"
+                                        FontWeight="SemiBold"
+                                        Foreground="{Binding EstadoOperacion, Converter={StaticResource EstadoAColor}}"
+                                        Text="{Binding EstadoOperacion}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock VerticalAlignment="Center" Style="{StaticResource SectionTitleStyle}" Text="Productos de la pauta" />
+                <CheckBox
+                    x:Name="SoloPendientes"
+                    Grid.Column="1"
+                    Margin="0,0,16,0"
+                    VerticalAlignment="Center"
+                    Checked="Filtro_Changed"
+                    Content="Solo pendientes"
+                    Unchecked="Filtro_Changed" />
+                <TextBlock
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Foreground="{StaticResource MutedBrush}"
+                    Text="{Binding Conteo}" />
+            </Grid>
+
+            <TextBlock
+                Style="{StaticResource SubtitleStyle}"
+                Text="No hay productos con ese filtro."
+                Visibility="{Binding NoHayResultados, Converter={StaticResource BoolAVisibilidad}}" />
+
+            <Border Padding="0" Style="{StaticResource CardStyle}" Visibility="{Binding HayResultados, Converter={StaticResource BoolAVisibilidad}}">
+                <StackPanel>
+                    <Grid Padding="16,12" Background="{StaticResource SoftBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="1.2*" />
+                            <ColumnDefinition Width="1.3*" />
+                            <ColumnDefinition Width="1.2*" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock FontSize="12" FontWeight="SemiBold" Text="Fecha" />
+                        <TextBlock Grid.Column="1" FontSize="12" FontWeight="SemiBold" Text="Cliente" />
+                        <TextBlock Grid.Column="2" FontSize="12" FontWeight="SemiBold" Text="Producto" />
+                        <TextBlock Grid.Column="3" FontSize="12" FontWeight="SemiBold" Text="Operación" />
+                        <TextBlock Grid.Column="4" FontSize="12" FontWeight="SemiBold" Text="Importe" />
+                        <TextBlock Grid.Column="5" FontSize="12" FontWeight="SemiBold" Text="Cobro" />
+                    </Grid>
+                    <ItemsControl ItemsSource="{Binding Visibles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="16,8" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,0,0,1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="110" />
+                                        <ColumnDefinition Width="1.2*" />
+                                        <ColumnDefinition Width="1.3*" />
+                                        <ColumnDefinition Width="1.2*" />
+                                        <ColumnDefinition Width="90" />
+                                        <ColumnDefinition Width="150" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding FechaTexto}" />
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding ClienteNombre}" TextTrimming="CharacterEllipsis" />
+                                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Producto}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock FontSize="12" Foreground="{StaticResource MutedBrush}" Text="{Binding TipoProducto}" />
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{Binding OperacionCorta}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding TotalTexto}" />
+                                    <Button
+                                        Grid.Column="5"
+                                        VerticalAlignment="Center"
+                                        Click="Cobrar_Click"
+                                        Content="{Binding TextoCobro}"
+                                        IsEnabled="{Binding PuedeCobrar}"
+                                        Style="{StaticResource BotonPrimario}"
+                                        Tag="{Binding}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
